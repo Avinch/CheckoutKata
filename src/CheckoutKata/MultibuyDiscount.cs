@@ -18,9 +18,15 @@ public class MultibuyDiscount : IDiscount
 
     public void Apply(ref List<Item> items)
     {
-        if (items.Any(x => x.Code == ProductSku) && items.Count(x => x.Code == ProductSku) >= QuantityAppliesTo)
+        if (items.Any(x => x.Code == ProductSku))
         {
             var totalCount = items.Count(x => x.Code == ProductSku);
+
+            if (totalCount < QuantityAppliesTo)
+            {
+                return;
+            }
+            
             var quantityDoesNotApplyTo = totalCount % QuantityAppliesTo;
             var totalCountAppliesTo = totalCount - quantityDoesNotApplyTo;
             var setOfDiscounts = totalCountAppliesTo / QuantityAppliesTo;
@@ -28,7 +34,10 @@ public class MultibuyDiscount : IDiscount
             // for each discount, add a new item with the discount price
             for (int i = 0; i < setOfDiscounts; i++)
             {
-                items.Add(new Item(Name, NewPrice));
+                items.Add(new Item(Name, NewPrice)
+                {
+                    UnderlyingDiscount = this
+                });
             }
 
             // also take out all the items that the discount applies to

@@ -1,6 +1,5 @@
 ﻿namespace CheckoutKata;
 
-
 public class Checkout : ICheckout
 {
     private List<Item> _userBasket { get; set; }
@@ -52,7 +51,7 @@ public class Checkout : ICheckout
         var foundItem = _availableItems.SingleOrDefault(x => x.Code == sku);
         if (foundItem == null)
         {
-            throw new Exception($"Item with code {sku} not found");
+            throw new ItemNotFoundException(sku);
         }
 
         for (int i = 0; i < quantity; i++)

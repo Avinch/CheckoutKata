@@ -44,7 +44,7 @@ public class CheckoutTests
     [Test]
     public void NonExistentItem_ThrowsException()
     {
-        Assert.Throws<Exception>(() => _checkout.Scan("code_does_not_exist"));
+        Assert.Throws<ItemNotFoundException>(() => _checkout.Scan("code_does_not_exist"));
     }
 
     [TearDown]
